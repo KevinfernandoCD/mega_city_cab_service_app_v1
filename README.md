@@ -13,4 +13,5 @@ Ride Completion: The driver completes the ride and updates the status.
 Billing & Payment: The system generates a bill, and the customer makes a payment.
 Transaction Logging: The system records the payment and updates the customer’s transaction history.
 
-![Uploading diagram (7).png…]()
+
+![diagram (7)](https://github.com/user-attachments/assets/68b74b28-6dbc-463a-b081-d56b3f8d2c50)
