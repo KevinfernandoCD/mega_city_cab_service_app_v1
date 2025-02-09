@@ -1,0 +1,48 @@
+
+.stats {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 20px;
+    margin-top: 30px;
+}
+
+.stat-item {
+    background-color: #fff;
+    border-radius: 8px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    padding: 20px;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    text-align: center;
+}
+
+.stat-item img {
+    width: 100px;
+    height: 100px;
+    object-fit: cover;
+    margin-bottom: 15px;
+    border-radius: 50%;
+}
+
+.stat-item h3 {
+    font-size: 1.2em;
+    margin-bottom: 10px;
+}
+
+.stat-item p {
+    font-size: 1.5em;
+    font-weight: bold;
+}
+
+/* Layout for the first card to span full width */
+.stat-item:first-child {
+    flex: 1 1 100%;
+}
+
+
+
+/* Layout for the subsequent cards to occupy half width */
+.stat-item:nth-child(n+2) {
+    flex: 1 1 calc(50% - 10px);
+}
