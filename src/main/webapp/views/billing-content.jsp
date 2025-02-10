@@ -23,6 +23,9 @@
                             <a href="deleteBill?id=${bill.billID}" class="delete-btn" onclick="return confirm('Are you sure?');">
                                 <i class="fas fa-trash"></i>
                             </a>
+                                 <a href="new-transaction.jsp" class="edit-btn">
+                                <i>Update Payment</i>
+                            </a>
                         </td>
                     </tr>
                 </c:forEach>

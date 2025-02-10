@@ -1,6 +1,6 @@
     <h1>Vehicle Management</h1>
     <div class="table-container">
-        <a href="registerVehicle.jsp" class="register-btn">Register New Vehicle</a>
+        <a href="register-vehicle.jsp" class="register-btn">Register New Vehicle</a>
         <table>
             <thead>
                 <tr>

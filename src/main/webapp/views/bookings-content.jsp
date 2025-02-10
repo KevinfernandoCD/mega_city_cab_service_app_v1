@@ -1,6 +1,6 @@
     <h1>Bookings Management</h1>
     <div class="table-container">
-        <a href="registerBooking.jsp" class="register-btn">Register New Booking</a>
+        <a href="registerBooking.jsp" class="register-btn"> + New Booking</a>
         <table>
             <thead>
                 <tr>
@@ -32,6 +32,9 @@
                             </a>
                             <a href="deleteBooking?id=${booking.bookingID}" class="delete-btn" onclick="return confirm('Are you sure?');">
                                 <i class="fas fa-trash"></i>
+                            </a>
+                               <a href="editBooking.jsp?id=${booking.bookingID}" class="bill-btn">
+                                <i>Generate Bill</i>
                             </a>
                         </td>
                     </tr>
