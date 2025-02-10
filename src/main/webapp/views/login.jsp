@@ -1,3 +1,11 @@
+<%
+    // Check if a session exists and user is already logged in
+    if (session != null && session.getAttribute("username") != null) {
+        response.sendRedirect("admin-dashboard.jsp");
+        return; // Stop further execution
+    }
+%>
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
