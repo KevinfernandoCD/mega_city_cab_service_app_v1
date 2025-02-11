@@ -19,8 +19,9 @@ public class DbConnection {
     /**
      * Private constructor to prevent instantiation.
      */
-    private DbConnection() throws SQLException {
+    private DbConnection() throws SQLException, ClassNotFoundException {
         try {
+            Class.forName("com.mysql.cj.jdbc.Driver");
             this.connection = DriverManager.getConnection(URL, USER, PASSWORD);
         } catch (SQLException e) {
             throw new SQLException("Error connecting to the database", e);
@@ -33,7 +34,7 @@ public class DbConnection {
      * @return the singleton instance
      * @throws SQLException if a database access error occurs
      */
-    public static DbConnection getInstance() throws SQLException {
+    public static DbConnection getInstance() throws SQLException, ClassNotFoundException {
         if (instance == null) {
             synchronized (DbConnection.class) {
                 if (instance == null) {
