@@ -43,9 +43,6 @@ public class AuthServlet extends HttpServlet {
         HttpSession session = request.getSession();
 
         String result = authService.login(email, password, session);
-
-        response.setContentType("application/json");
-        response.setCharacterEncoding("UTF-8");
         response.setStatus("Login successful".equals(result) ? HttpServletResponse.SC_OK : HttpServletResponse.SC_UNAUTHORIZED);
         
         try (PrintWriter out = response.getWriter()) {
@@ -63,6 +60,20 @@ public class AuthServlet extends HttpServlet {
 
         try (PrintWriter out = response.getWriter()) {
             out.write("Hello");
+        }
+    }
+    
+      @Override
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        HttpSession session = request.getSession(false); // Don't create a new session
+        if (session != null) {
+            session.invalidate(); // Destroy session
+        }
+
+        response.setContentType("application/json");
+        response.setStatus(HttpServletResponse.SC_OK);
+        try (PrintWriter out = response.getWriter()) {
+            out.write("{\"message\": \"Logout successful\"}");
         }
     }
 }

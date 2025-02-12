@@ -19,7 +19,7 @@
                     <li><a href="bookings.jsp"><i class="fas fa-book"></i> Manage Bookings</a></li>
                     <li><a href="billings.jsp"><i class="fas fa-file-invoice"></i> View Bills</a></li>
                     <li><a href="transactions.jsp"><i class="fas fa-exchange-alt"></i> View Transactions</a></li>
-                    <li><a href="login.jsp"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
+                    <li><a onclick="logoutUser()"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
                 </ul>
             </nav>
         </aside>
@@ -28,4 +28,18 @@
     function redirectToDashboard() {
         window.location.href = "admin-dashboard.jsp";
     }
+    
+    function logoutUser() {
+    fetch("http://localhost:8080/MegaCity_Cab_Service/auth", {
+        method: "DELETE",
+        headers: { "Content-Type": "application/json" }
+    })
+    .then(response => response.json())
+    .then(data => {
+        alert(data.message); // Show success message
+        window.location.href = "login.jsp"; // Redirect to login page
+    })
+    .catch(error => console.error("Error:", error));
+}
+
 </script>
