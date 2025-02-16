@@ -168,6 +168,6 @@ public class UserDAO {
                 rs.getString("email"),
                 rs.getString("password"),
                 rs.getString("role")
-        );
+        ) {};
     }
 }

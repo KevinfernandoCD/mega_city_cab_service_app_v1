@@ -3,7 +3,7 @@ package com.mycompany.megacity_cab_service.models;
 /**
  * User model representing a system user.
  */
-public class User {
+public abstract class User  {
     private int id;
     private String username;
     private String email;

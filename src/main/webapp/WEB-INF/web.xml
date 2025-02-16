@@ -8,4 +8,9 @@
             30
         </session-timeout>
     </session-config>
+    <context-param>
+    <param-name>apiBaseUrl</param-name>
+    <param-value>http://localhost:8080/MegaCity_Cab_Service</param-value>
+</context-param>
+
 </web-app>

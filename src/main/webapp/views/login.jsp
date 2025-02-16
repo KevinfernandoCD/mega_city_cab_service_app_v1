@@ -32,7 +32,8 @@
         </div>
     </div>
    <script>
- 
+ const API_BASE_URL = "<%= application.getInitParameter("apiBaseUrl") %>";
+
    document.addEventListener("DOMContentLoaded", function () {
     document.getElementById("loginForm").addEventListener("submit", async function (event) {
         event.preventDefault(); // Prevent default form submission
@@ -41,7 +42,7 @@
         const password = document.getElementById("password").value;
 
         try {
-            const response = await fetch("http://localhost:8080/MegaCity_Cab_Service/auth", {
+            const response = await fetch(API_BASE_URL+"/auth", {
                 method: "POST",
                 headers: { "Content-Type": "application/x-www-form-urlencoded" },
                 body: new URLSearchParams({ email, password }).toString(), // Encode data
