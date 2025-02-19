@@ -25,7 +25,7 @@ public class VehicleDAO {
      * @return A message indicating success or failure.
      */
     public String insertVehicle(Vehicle vehicle) {
-        String query = "INSERT INTO vehicles (type, model, capacity, color, regNo, isAvailable) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO vehicles (type, model, capacity, color, regNo, isAvailable, brand) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try {
             dbConnection.executeWriteQuery(
                     query,
@@ -34,7 +34,8 @@ public class VehicleDAO {
                     vehicle.getCapacity(),
                     vehicle.getColor(),
                     vehicle.getRegistrationNumber(),
-                    vehicle.isAvailable()
+                    vehicle.isAvailable(),
+                    vehicle.getBrand()
             );
             return "Vehicle has been added successfully";
         } catch (SQLException e) {
@@ -119,6 +120,7 @@ public class VehicleDAO {
         } catch (SQLException e) {
             e.printStackTrace();
         }
+        System.out.println("HELEODODO" + vehicles);
         return vehicles;
     }
 
@@ -156,7 +158,7 @@ public class VehicleDAO {
             rs.getString("color"),
             rs.getString("regNo"),
             rs.getInt("capacity"),
-            rs.getBoolean("availability"),
+            rs.getBoolean("isAvailable"),
             rs.getString("type")
     );
 }

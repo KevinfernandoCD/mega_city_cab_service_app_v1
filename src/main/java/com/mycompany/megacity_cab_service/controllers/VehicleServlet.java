@@ -9,6 +9,7 @@ import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
 import java.io.IOException;
+import java.io.PrintWriter;
 import java.sql.SQLException;
 import java.util.List;
 
@@ -64,7 +65,8 @@ public class VehicleServlet extends HttpServlet {
 
     private void listVehicles(HttpServletRequest request, HttpServletResponse response) throws IOException {
         List<Vehicle> vehicles = vehicleService.getAllVehicles();
-        response.getWriter().write(vehicles.toString());
+        PrintWriter out = response.getWriter();
+        vehicles.forEach(out::println);
     }
 
     private void listAvailableVehicles(HttpServletRequest request, HttpServletResponse response) throws IOException {
@@ -80,10 +82,9 @@ public class VehicleServlet extends HttpServlet {
             String color = request.getParameter("color");
             String regNo = request.getParameter("regNo");
             int capacity = Integer.parseInt(request.getParameter("capacity"));
-            boolean availability = Boolean.parseBoolean(request.getParameter("availability"));
             String type = request.getParameter("type");
 
-            Vehicle vehicle = new Vehicle(model, brand, color, regNo, capacity, availability, type);
+            Vehicle vehicle = new Vehicle(model, brand, color, regNo, capacity, true, type);
             String result = vehicleService.addVehicle(vehicle);
             response.getWriter().write(result);
         } catch (Exception e) {
@@ -95,12 +96,10 @@ public class VehicleServlet extends HttpServlet {
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             int id = Integer.parseInt(request.getParameter("id"));
-            String color = request.getParameter("color");
             boolean availability = Boolean.parseBoolean(request.getParameter("availability"));
 
             Vehicle vehicle = vehicleService.getVehicleById(id);
             if (vehicle != null) {
-                vehicle.setColor(color);
                 vehicle.setAvailability(availability);
                 boolean success = vehicleService.updateVehicle(vehicle);
                 response.getWriter().write(success ? "Vehicle updated successfully." : "Failed to update vehicle.");
@@ -115,7 +114,16 @@ public class VehicleServlet extends HttpServlet {
     @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
+            if(request.getParameter("id") == null)  {
+                 response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+                  response.getWriter().println("Driver ID is required for deletion.");
+            }
+            
+         
+            
             int vehicleId = Integer.parseInt(request.getParameter("id"));
+            
+            
             boolean success = vehicleService.removeVehicle(vehicleId);
             response.getWriter().write(success ? "Vehicle deleted successfully." : "Failed to delete vehicle.");
         } catch (Exception e) {
