@@ -1,15 +1,13 @@
-
-
 <h1>Register New Customer</h1>
-<form class="register-form" action="submit-customer.jsp" method="post">
+<form class="register-form" id="customerForm">
     <div class="form-group">
         <label for="name">Full Name</label>
         <input type="text" id="name" name="name" required>
     </div>
 
     <div class="form-group">
-        <label for="email">Email</label>
-        <input type="email" id="email" name="email" required>
+        <label for="nic">NIC No</label>
+        <input type="text" id="nic" name="nic" required>
     </div>
 
     <div class="form-group">
@@ -27,3 +25,37 @@
         <button type="submit" class="create-btn">Register</button>
     </div>
 </form>
+
+<script>
+    const API_BASE_URL = "<%= application.getInitParameter("apiBaseUrl") %>";
+
+    document.getElementById("customerForm").addEventListener("submit", async function(event) {
+        event.preventDefault(); // Prevent default form submission
+
+        const formData = new URLSearchParams();
+        formData.append("name", document.getElementById("name").value);
+        formData.append("nic", document.getElementById("nic").value); // Corrected ID
+        formData.append("phone", document.getElementById("phone").value);
+        formData.append("address", document.getElementById("address").value);
+
+        try {
+            const response = await fetch(API_BASE_URL + "/customer", {
+                method: "POST",
+                headers: {
+                    "Content-Type": "application/x-www-form-urlencoded"
+                },
+                body: formData
+            });
+
+            const result = await response.text();
+            if (response.ok) {
+                alert("Customer has been registered successfully!");
+                document.getElementById("customerForm").reset();
+            } else {
+                alert("Error: " + result || "Registration failed");
+            }
+        } catch (error) {
+            alert("An error occurred: " + error.message);
+        }
+    });
+</script>

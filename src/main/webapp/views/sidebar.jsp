@@ -19,6 +19,7 @@
                     <li><a href="bookings.jsp"><i class="fas fa-book"></i> Manage Bookings</a></li>
                     <li><a href="billings.jsp"><i class="fas fa-file-invoice"></i> View Bills</a></li>
                     <li><a href="transactions.jsp"><i class="fas fa-exchange-alt"></i> View Transactions</a></li>
+                    <li><a href="user-guide.jsp"><i class="fa-solid fa-question"></i>User Guild</a></li>
                     <li><a onclick="logoutUser()"><i class="fas fa-sign-out-alt"></i> Logout</a></li>
                 </ul>
             </nav>
