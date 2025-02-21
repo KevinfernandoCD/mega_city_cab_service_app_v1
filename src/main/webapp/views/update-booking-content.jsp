@@ -1,23 +1,15 @@
-<h1>Add New Booking</h1>
-<form class="register-form" id="bookingForm">
-     <div class="form-group">
-        <label for="type">Select a Customer</label>
-        <select id="customerSelect" name="customer_id" required>
-        
-        </select>
-    </div>
-    
-     <div class="form-group">
-          <label for="type">Select a Driver</label>
-        <select  id="driverSelect" name="driver_id" required>
-        
-        </select>
-    </div>
+<h1>Update Booking Details</h1>
+<form class="register-form" id="vehicleForm">
    
-
+   <div class="form-group">
+        <label for="type">Assign a Driver</label>
+        <select id="driverSelect" name="driver_id" required>
+  
+        </select>
+    </div>
       <div class="form-group">
           
-        <label for="type">Select a Vehicle</label>
+        <label for="type">Assign a Vehicle</label>
         <select id="vehicleSelect" name="vehicle_id" required>
       
         </select>
@@ -36,7 +28,15 @@
         </select>
     </div>
 
-   
+    <div class="form-group">
+        <label for="type">Booking Status</label>
+        <select id="status" name="status" required>
+            <option value="PENDINNG">Pending</option>
+            <option value="ONGOING">Ongoing</option>
+            <option value="COMPLETE">Complete</option>
+             <option value="CANCELLED">Cancelled</option>
+        </select>
+    </div>
 
     <div class="form-buttons">
         <button type="button" class="back-btn" onclick="history.back()">Back</button>
@@ -79,31 +79,6 @@
     }
 }
 
-async function loadCustomers() {
-    try {
-        const response = await fetch(API_BASE_URL + '/customer'); 
-        if (!response.ok) {
-            throw new Error('Failed to fetch customers');
-        }
-        const data = await response.text();
-        
-        const customerSelect = document.getElementById('customerSelect');
-        
-        const customerLines = data.split('\n'); // Split response lines
-        
-        customerLines.forEach(line => {
-            const match = line.match(/Customer\{id=(\d+), name='([^']+)'/);
-            if (match) {
-                const option = document.createElement('option');
-                option.value = match[1];
-                option.textContent = match[2];
-                customerSelect.appendChild(option);
-            }
-        });
-    } catch (error) {
-        console.error('Error loading customers:', error);
-    }
-}
 
 async function loadVehicles() {
     try {
@@ -152,36 +127,5 @@ document.addEventListener('DOMContentLoaded', () => {
     populateLocationDropdown("dropoffLocation");
 });
 
-document.getElementById("bookingForm").addEventListener("submit", async function(event) {
-    event.preventDefault(); // Prevent default form submission
-
-    const formData = new URLSearchParams();
-    formData.append("customer_id", document.getElementById("customerSelect").value);
-    formData.append("driver_id", document.getElementById("driverSelect").value);
-    formData.append("vehicle_id", document.getElementById("vehicleSelect").value);
-    formData.append("pickup_location", document.getElementById("pickupLocation").value);
-    formData.append("drop_location", document.getElementById("dropoffLocation").value);
-
-    try {
-        const response = await fetch(API_BASE_URL + "/booking", {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/x-www-form-urlencoded"
-            },
-            body: formData
-        });
-
-        const result = await response.text();
-        if (response.ok) {
-            alert("Booking has been created successfully!");
-            document.getElementById("bookingForm").reset();
-        } else {
-            alert("Error: " + result.toString() || "Booking failed");
-        }
-    } catch (error) {
-        alert("An error occurred: " + error.message);
-    }
-});
 
 </script>
-

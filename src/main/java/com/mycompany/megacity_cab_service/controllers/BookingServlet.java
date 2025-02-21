@@ -63,6 +63,7 @@ public class BookingServlet extends HttpServlet {
 
     private void listBookings(HttpServletRequest request, HttpServletResponse response) throws IOException {
         List<BookingResponseDto> bookings = bookingService.getAllBookings();
+        System.out.println("BOokings" + bookings);
         PrintWriter out = response.getWriter();
         bookings.forEach(out::println);
         response.setStatus(HttpServletResponse.SC_OK);
@@ -77,7 +78,7 @@ public class BookingServlet extends HttpServlet {
             String pickupLocation = request.getParameter("pickup_location");
             String dropLocation = request.getParameter("drop_location");
 
-            Booking booking = new Booking(customerId, driverId, vehicleId, pickupLocation, dropLocation, "PENNDINNG");
+            Booking booking = new Booking(customerId, driverId, vehicleId, pickupLocation, dropLocation, "PENDING");
             String result = bookingService.addBooking(booking);
             response.getWriter().write(result);
         } catch (Exception e) {

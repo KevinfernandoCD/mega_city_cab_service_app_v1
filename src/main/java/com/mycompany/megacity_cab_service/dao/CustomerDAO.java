@@ -73,7 +73,7 @@ public class CustomerDAO {
      * @return true if successful, false otherwise.
      */
     public boolean deleteCustomer(int customerId) {
-        String query = "DELETE FROM customers WHERE customerId = ?";
+        String query = "DELETE FROM customers WHERE customer_id = ?";
         try {
             dbConnection.executeWriteQuery(query, customerId);
             return true;

@@ -26,7 +26,7 @@ public class BookingDAO {
      * @return A message indicating success or failure.
      */
     public String insertBooking(Booking booking) {
-        String query = "INSERT INTO bookings (customer_id, driver_id, vehicle_id, pickup_location, drop_location, booking_date, status) VALUES (?, ?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO bookings (customer_id, driver_id, vehicle_id, pickup_location, drop_location, status) VALUES (?, ?, ?, ?, ?, ?)";
         try {
             dbConnection.executeWriteQuery(
                     query,
@@ -35,7 +35,6 @@ public class BookingDAO {
                     booking.getVehicleId(),
                     booking.getPickupLocation(),
                     booking.getDropLocation(),
-                    Timestamp.valueOf(booking.getBookingDate()),
                     booking.getStatus()
             );
             return "Booking has been added successfully";
@@ -115,19 +114,32 @@ public class BookingDAO {
      *
      * @return A list of Booking objects.
      */
-    public List<BookingResponseDto> getAllBookings() {
-        List<BookingResponseDto> bookings = new ArrayList<>();
-        String query = "SELECT * FROM bookings";
-        try (PreparedStatement stmt = dbConnection.getConnection().prepareStatement(query);
-             ResultSet rs = stmt.executeQuery()) {
-            while (rs.next()) {
-                bookings.add(BookingResponseDto.extractBookingResponseFromResultSet(rs));
-            }
-        } catch (SQLException e) {
-            e.printStackTrace();
+  public List<BookingResponseDto> getAllBookings() {
+    List<BookingResponseDto> bookings = new ArrayList<>();
+    String query = "SELECT " +
+                   "b.id, " +
+                   "c.name AS customer_name, " +
+                   "d.name AS driver_name, " +
+                   "v.regNo AS vehicle_reg_no, " +
+                   "b.pickup_location, " +
+                   "b.drop_location, " +
+                   "b.booking_date, " +
+                   "b.status " +
+                   "FROM bookings b " +
+                   "JOIN customers c ON b.customer_id = c.customer_id " +
+                   "JOIN drivers d ON b.driver_id = d.id " +
+                   "JOIN vehicles v ON b.vehicle_id = v.id";
+
+    try (PreparedStatement stmt = dbConnection.getConnection().prepareStatement(query);
+         ResultSet rs = stmt.executeQuery()) {
+        while (rs.next()) {
+            bookings.add(BookingResponseDto.extractBookingResponseFromResultSet(rs));
         }
-        return bookings;
+    } catch (SQLException e) {
+        e.printStackTrace();
     }
+    return bookings;
+}
 
     /**
      * Extracts a Booking object from a ResultSet.

@@ -1,6 +1,6 @@
     <h1>Bookings Management</h1>
     <div class="table-container">
-        <a href="registerBooking.jsp" class="register-btn"> + New Booking</a>
+        <a href="add-booking.jsp" class="register-btn"> + New Booking</a>
         <table>
             <thead>
                 <tr>
@@ -27,7 +27,7 @@
                         <td><fmt:formatDate value="${booking.bookingDate}" pattern="yyyy-MM-dd HH:mm" /></td>
                         <td><c:out value="${booking.status}" /></td>
                         <td>
-                            <a href="editBooking.jsp?id=${booking.bookingID}" class="edit-btn">
+                            <a href="update-booking.jsp?id=${booking.bookingID}" class="edit-btn">
                                 <i class="fas fa-edit"></i>
                             </a>
                             <a href="deleteBooking?id=${booking.bookingID}" class="delete-btn" onclick="return confirm('Are you sure?');">

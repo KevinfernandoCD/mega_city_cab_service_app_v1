@@ -65,7 +65,7 @@
 
     function deleteCustomer(customerId) {
         if (confirm("Are you sure you want to delete customer with ID: " + customerId + "?")) {
-            fetch(API_BASE_URL + "/customers?customerId=" + customerId, {
+            fetch(API_BASE_URL + "/customer?id=" + customerId, {
                 method: 'DELETE',
             })
             .then(response => {
