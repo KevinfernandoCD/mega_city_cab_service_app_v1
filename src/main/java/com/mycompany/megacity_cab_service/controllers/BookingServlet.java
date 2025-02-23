@@ -76,8 +76,9 @@ public class BookingServlet extends HttpServlet {
             int vehicleId = Integer.parseInt(request.getParameter("vehicle_id"));
             String pickupLocation = request.getParameter("pickup_location");
             String dropLocation = request.getParameter("drop_location");
+            double distance = Double.parseDouble(request.getParameter("distance"));
 
-            Booking booking = new Booking(customerId, driverId, vehicleId, pickupLocation, dropLocation, "PENDING");
+            Booking booking = new Booking(customerId, driverId, vehicleId, pickupLocation, dropLocation, "PENDING",distance);
             String result = bookingService.addBooking(booking);
             response.getWriter().write(result);
         } catch (Exception e) {

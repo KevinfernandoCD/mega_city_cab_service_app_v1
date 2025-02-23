@@ -1,64 +1,108 @@
-import interfaces.FareStrategy;
+package com.mycompany.megacity_cab_service.models;
 
 public class Billing {
-    private int billingId;
-    private int bookingId;
-    private int customerId;
+    private int id;
     private double totalFare;
-    private double discount;
-    private double addedDiscounts; 
-    private double taxAmount;
-    private double specialCharges;
     private double baseFare;
+    private double addedDiscountAmount;
+    private double addedTaxAmount;
     private boolean paid;
+    private int bookingId;
 
-    public Billing(int billingId, int bookingId, int customerId, double baseFare, boolean paid) {
-        this.billingId = billingId;
-        this.bookingId = bookingId;
-        this.customerId = customerId;
+    // Constructors
+    public Billing() {
+    }
+
+    public Billing(int id, double baseFare, double discount, double tax, boolean paid, int bookingId) {
+        this.id = id;
         this.baseFare = baseFare;
-        this.specialCharges = specialCharges;
         this.paid = paid;
-        this.addedDiscounts = 0.0;
+        this.addedDiscountAmount = discount;
+        this.addedTaxAmount = tax;
+        this.bookingId = bookingId;
+    }
+    
+     public Billing( double baseFare, double discount, double tax, boolean paid, int bookingId) {
+        this.baseFare = baseFare;
+        this.paid = paid;
+        this.addedDiscountAmount = discount;
+        this.addedTaxAmount = tax;
+        this.bookingId = bookingId;
     }
 
-    public double getTaxAmount() {
-        return taxAmount;
+    // Getters and Setters
+    public int getId() {
+        return id;
     }
 
-    public double getDiscount() {
-        return discount;
-    }
-
-    public void setDiscount(double input) {
-        this.discount = input;
-    }
-
-    public double getAddedDiscounts() {
-        return addedDiscounts;
-    }
-
-    public void setAddedDiscounts(double addedDiscounts) {
-        this.addedDiscounts = addedDiscounts;
-    }
-
-    public void setTaxAmount(double amount) {
-        this.taxAmount = amount;
-    }
-
-    public void calculateTotalFare(FareStrategy strategy, double distance) {
-        this.totalFare = strategy.calculateFare(baseFare, distance) + specialCharges - addedDiscounts;
+    public void setId(int id) {
+        this.id = id;
     }
 
     public double getTotalFare() {
         return totalFare;
     }
 
+    public void setTotalFare(double totalFare) {
+        this.totalFare = totalFare;
+    }
+
+    public double getBaseFare() {
+        return baseFare;
+    }
+
+    public void setBaseFare(double baseFare) {
+        this.baseFare = baseFare;
+    }
+
+    public double getAddedDiscountAmount() {
+        return addedDiscountAmount;
+    }
+
+    public void setAddedDiscountAmount(double addedDiscountAmount) {
+        this.addedDiscountAmount = addedDiscountAmount;
+    }
+
+    public double getAddedTaxAmount() {
+        return addedTaxAmount;
+    }
+
+    public void setAddedTaxAmount(double addedTaxAmount) {
+        this.addedTaxAmount = addedTaxAmount;
+    }
+
+ 
     public boolean isPaid() {
         return paid;
     }
 
     public void setPaid(boolean paid) {
         this.paid = paid;
+    }
+
+    public int getBookingId() {
+        return bookingId;
+    }
+
+    public void setBookingId(int bookingId) {
+        this.bookingId = bookingId;
+    }
+
+    // Method to calculate the final fare
+    public void calculateTotalFare() {
+        totalFare = (baseFare - addedDiscountAmount) + addedTaxAmount;
+    }
+
+    @Override
+    public String toString() {
+        return "Billing{" +
+                "id=" + id +
+                ", totalFare=" + totalFare +
+                ", baseFare=" + baseFare +
+                ", addedDiscountAmount=" + addedDiscountAmount +
+                ", addedTaxAmount=" + addedTaxAmount +
+                ", paid=" + paid +
+                ", bookingId=" + bookingId +
+                '}';
     }
 }

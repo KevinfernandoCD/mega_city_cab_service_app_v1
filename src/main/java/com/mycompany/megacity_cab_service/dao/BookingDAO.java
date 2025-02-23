@@ -26,7 +26,7 @@ public class BookingDAO {
      * @return A message indicating success or failure.
      */
     public String insertBooking(Booking booking) {
-        String query = "INSERT INTO bookings (customer_id, driver_id, vehicle_id, pickup_location, drop_location, status) VALUES (?, ?, ?, ?, ?, ?)";
+        String query = "INSERT INTO bookings (customer_id, driver_id, vehicle_id, pickup_location, drop_location, status, distance) VALUES (?, ?, ?, ?, ?, ?, ?)";
         try {
             dbConnection.executeWriteQuery(
                     query,
@@ -35,7 +35,8 @@ public class BookingDAO {
                     booking.getVehicleId(),
                     booking.getPickupLocation(),
                     booking.getDropLocation(),
-                    booking.getStatus()
+                    booking.getStatus(),
+                    booking.getDistance()
             );
             return "Booking has been added successfully";
         } catch (SQLException e) {
@@ -124,7 +125,8 @@ public class BookingDAO {
                    "b.pickup_location, " +
                    "b.drop_location, " +
                    "b.booking_date, " +
-                   "b.status " +
+                   "b.status, " +
+                   "b.distance " +
                    "FROM bookings b " +
                    "JOIN customers c ON b.customer_id = c.customer_id " +
                    "JOIN drivers d ON b.driver_id = d.id " +

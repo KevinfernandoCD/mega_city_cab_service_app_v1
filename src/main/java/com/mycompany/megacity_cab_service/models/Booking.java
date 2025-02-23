@@ -2,7 +2,6 @@ package com.mycompany.megacity_cab_service.models;
 
 import java.time.LocalDateTime;
 
-
 public class Booking {
     private int id;
     private int customerId;
@@ -12,12 +11,13 @@ public class Booking {
     private String dropLocation;
     private LocalDateTime bookingDate;
     private String status;
+    private double distance;
 
     // Constructors
     public Booking() {
     }
 
-    public Booking(int id , int customerId, int driverId, int vehicleId, String pickupLocation, String dropLocation, String status) {
+    public Booking(int id , int customerId, int driverId, int vehicleId, String pickupLocation, String dropLocation, String status,double distance) {
         this.id = id;
         this.customerId = customerId;
         this.driverId = driverId;
@@ -26,15 +26,18 @@ public class Booking {
         this.dropLocation = dropLocation;
         this.bookingDate = LocalDateTime.now();
         this.status = status;
+        this.distance = distance;
     }
 
-    public Booking(int customerId, int driverId, int vehicleId, String pickupLocation, String dropLocation, String status) {
+    public Booking(int customerId, int driverId, int vehicleId, String pickupLocation, String dropLocation, String status,double distance) {
         this.customerId = customerId;
         this.driverId = driverId;
         this.vehicleId = vehicleId;
         this.pickupLocation = pickupLocation;
         this.dropLocation = dropLocation;
         this.status = status;
+        this.distance = distance;
+
     }
 
 
@@ -102,6 +105,14 @@ public class Booking {
     public void setStatus(String status) {
         this.status = status;
     }
+    
+    public double getDistance() {
+        return this.distance;
+    }
+
+    public void setDistance(double newDistance) {
+        this.distance = newDistance;
+    }
 
     // toString method
     @Override
@@ -115,6 +126,7 @@ public class Booking {
                 ", dropLocation='" + dropLocation + '\'' +
                 ", bookingDate=" + bookingDate +
                 ", status='" + status + '\'' +
+                ", distance='" + distance + '\'' +
                 '}';
     }
 }

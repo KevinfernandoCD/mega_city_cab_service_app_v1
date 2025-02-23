@@ -10,6 +10,7 @@
                 <th>Vehicle</th>
                 <th>Pickup Location</th>
                 <th>Drop-off Location</th>
+                <th>Trip Distance</th>
                 <th>Booking Date</th>
                 <th>Status</th>
                 <th>Actions</th>
@@ -52,53 +53,65 @@
         loadBookingTable(); // Load table on page load
     });
 
-    function loadBookingTable() {
-        fetch(API_BASE_URL + "/booking")
-            .then(response => response.text())
-            .then(data => {
-                const tableBody = document.getElementById("bookingTableBody");
-                tableBody.innerHTML = ""; // Clear existing rows
+  function loadBookingTable() {
+    fetch(API_BASE_URL + "/booking")
+        .then(response => response.text())
+        .then(data => {
+            const tableBody = document.getElementById("bookingTableBody");
+            tableBody.innerHTML = ""; // Clear existing rows
 
-                const bookingLines = data.trim().split("\n");
+            const bookingLines = data.trim().split("\n");
 
-                bookingLines.forEach(line => {
-                    const matches = line.match(/BookingResponseDto\{id=(\d+), customerName='([^']+)', driverName='([^']+)', vehicleRegNo='([^']+)', pickupLocation='([^']+)', dropLocation='([^']+)', bookingDate=([^,]+), status='([^']+)'\}/);
+            bookingLines.forEach(line => {
+                const matches = line.match(/BookingResponseDto\{id=(\d+), customerName='([^']+)', driverName='([^']+)', vehicleRegNo='([^']+)', pickupLocation='([^']+)', dropLocation='([^']+)', bookingDate=([^,]+), status='([^']+)', distance='([\d.]+)'\}/);
 
-                    if (matches) {
-                        const [_, id, customerName, driverName, vehicleRegNo, pickupLocation, dropLocation, bookingDate, status] = matches;
+                if (matches) {
+                    const [_, id, customerName, driverName, vehicleRegNo, pickupLocation, dropLocation, bookingDate, status, distance] = matches;
 
-                     let statusButton = "";
-if (status === "PENDING") {
-    statusButton = "<button class=\"edit-btn\" onclick=\"updateBookingStatus(" + id + ", 'ONGOING')\">ONGOING</button>";
-} else if (status === "ONGOING") {
-    statusButton = "<button class=\"edit-btn\" onclick=\"updateBookingStatus(" + id + ", 'COMPLETE')\">COMPLETE</button>";
+                    let statusButton = "";
+                    let cancelButton = "";
+                    let generateBillButton = ""; // Default: Hidden
+
+                    if (status === "PENDING") {
+                        statusButton = "<button class=\"edit-btn\" onclick=\"updateBookingStatus(" + id + ", 'ONGOING')\">ONGOING</button>";
+                        cancelButton = "<button class=\"delete-btn\" onclick=\"updateBookingStatus(" + id + ", 'CANCELED')\">" +
+                            "<i class=\"fa-solid fa-square-xmark\"></i></button>";
+                    } else if (status === "ONGOING") {
+                        statusButton = "<button class=\"edit-btn\" onclick=\"updateBookingStatus(" + id + ", 'COMPLETE')\">COMPLETE</button>";
+                        cancelButton = "<button class=\"delete-btn\" onclick=\"updateBookingStatus(" + id + ", 'CANCELED')\">" +
+                            "<i class=\"fa-solid fa-square-xmark\"></i></button>";
+                    } else if (status === "COMPLETE") {
+                        generateBillButton = "<a href=\"generate-bill.jsp?id=" + id + "\" class=\"bill-btn\">" +
+                            "<i>Generate Bill</i></a>"; // Only show if status is "COMPLETE"
+                    }
+
+                    // Determine action buttons
+                    let actionButtons = statusButton + cancelButton;
+                    if (status === "COMPLETE") {
+                        actionButtons = generateBillButton; // Only show bill button if "COMPLETE"
+                    }
+
+                    const row = document.createElement("tr");
+                    row.innerHTML =
+                        "<td>" + id + "</td>" +
+                        "<td>" + customerName + "</td>" +
+                        "<td>" + driverName + "</td>" +
+                        "<td>" + vehicleRegNo + "</td>" +
+                        "<td>" + pickupLocation + "</td>" +
+                        "<td>" + dropLocation + "</td>" +
+                        "<td>" + distance + " KM</td>" + // Added KM suffix
+                        "<td>" + new Date(bookingDate).toLocaleString() + "</td>" +
+                        "<td>" + status + "</td>" +
+                        "<td>" + actionButtons + "</td>";
+
+                    tableBody.appendChild(row);
+                }
+            });
+        })
+        .catch(error => console.error("Error fetching bookings:", error));
 }
 
 
-                        const row = document.createElement("tr");
-                        row.innerHTML =
-                            "<td>" + id + "</td>" +
-                            "<td>" + customerName + "</td>" +
-                            "<td>" + driverName + "</td>" +
-                            "<td>" + vehicleRegNo + "</td>" +
-                            "<td>" + pickupLocation + "</td>" +
-                            "<td>" + dropLocation + "</td>" +
-                            "<td>" + new Date(bookingDate).toLocaleString() + "</td>" +
-                            "<td>" + status + "</td>" +
-                            "<td>" +
-                            statusButton + 
-                            "<button class=\"delete-btn\" onclick=\"updateBookingStatus('" + id + "', 'CANCELED')\">" +
-                            "<i class=\"fa-solid fa-square-xmark\"></i></button>" +
-                            "<a href=\"generate-bill.jsp?id=" + id + "\" class=\"bill-btn\">" +
-                            "<i>Generate Bill</i></a>" +
-                            "</td>";
-
-                        tableBody.appendChild(row);
-                    }
-                });
-            })
-            .catch(error => console.error("Error fetching bookings:", error));
-    }
 
     function deleteBooking(bookingId) {
         if (confirm("Are you sure you want to delete booking with ID: " + bookingId + "?")) {

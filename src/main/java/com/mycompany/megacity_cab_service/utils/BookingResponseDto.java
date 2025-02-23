@@ -13,13 +13,14 @@ public class BookingResponseDto {
     private String dropLocation;
     private LocalDateTime bookingDate;
     private String status;
+    private double distance;
 
     // Constructors
     public BookingResponseDto() {
     }
 
     public BookingResponseDto(int id, String customerName, String driverName, String vehicleRegNo, 
-                              String pickupLocation, String dropLocation, LocalDateTime bookingDate, String status) {
+                              String pickupLocation, String dropLocation, LocalDateTime bookingDate, String status, double distance) {
         this.id = id;
         this.customerName = customerName;
         this.driverName = driverName;
@@ -28,6 +29,7 @@ public class BookingResponseDto {
         this.dropLocation = dropLocation;
         this.bookingDate = bookingDate;
         this.status = status;
+        this.distance = distance;
     }
 
     // Getters and Setters
@@ -94,6 +96,10 @@ public class BookingResponseDto {
     public void setStatus(String status) {
         this.status = status;
     }
+    
+      public void setDistance(double distance) {
+        this.distance = distance;
+    }
 
     // toString method
     @Override
@@ -107,6 +113,7 @@ public class BookingResponseDto {
                 ", dropLocation='" + dropLocation + '\'' +
                 ", bookingDate=" + bookingDate +
                 ", status='" + status + '\'' +
+                ", distance='" + distance + '\'' +
                 '}';
     }
     
@@ -120,6 +127,7 @@ public class BookingResponseDto {
     bookingResponse.setDropLocation(rs.getString("drop_location"));
     bookingResponse.setBookingDate(rs.getTimestamp("booking_date").toLocalDateTime());
     bookingResponse.setStatus(rs.getString("status"));
+    bookingResponse.setDistance(rs.getDouble("distance"));
     return bookingResponse;
 }
 

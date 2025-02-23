@@ -35,6 +35,11 @@
        
         </select>
     </div>
+    
+     <div class="form-group">
+            <label for="distance">Trip Distance (KM)</label>
+            <input type="number" id="distance" name="distance" required>
+        </div>
 
    
 
@@ -161,6 +166,7 @@ document.getElementById("bookingForm").addEventListener("submit", async function
     formData.append("vehicle_id", document.getElementById("vehicleSelect").value);
     formData.append("pickup_location", document.getElementById("pickupLocation").value);
     formData.append("drop_location", document.getElementById("dropoffLocation").value);
+    formData.append("distance", document.getElementById("distance").value);
 
     try {
         const response = await fetch(API_BASE_URL + "/booking", {
