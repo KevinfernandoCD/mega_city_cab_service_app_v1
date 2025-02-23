@@ -63,7 +63,6 @@ public class BookingServlet extends HttpServlet {
 
     private void listBookings(HttpServletRequest request, HttpServletResponse response) throws IOException {
         List<BookingResponseDto> bookings = bookingService.getAllBookings();
-        System.out.println("BOokings" + bookings);
         PrintWriter out = response.getWriter();
         bookings.forEach(out::println);
         response.setStatus(HttpServletResponse.SC_OK);
@@ -90,20 +89,12 @@ public class BookingServlet extends HttpServlet {
     protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         try {
             int id = Integer.parseInt(request.getParameter("id"));
-            int customerId = Integer.parseInt(request.getParameter("customer_id"));
-            int driverId = Integer.parseInt(request.getParameter("driver_id"));
-            int vehicleId = Integer.parseInt(request.getParameter("vehicle_id"));
-            String pickupLocation = request.getParameter("pickup_location");
-            String dropLocation = request.getParameter("drop_location");
+         
             String status = request.getParameter("status");
 
             Booking booking = bookingService.getBookingById(id);
             if (booking != null) {
-                booking.setCustomerId(customerId);
-                booking.setDriverId(driverId);
-                booking.setVehicleId(vehicleId);
-                booking.setPickupLocation(pickupLocation);
-                booking.setDropLocation(dropLocation);
+           
                 booking.setStatus(status);
 
                 boolean success = bookingService.updateBooking(booking);
