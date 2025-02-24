@@ -53,7 +53,7 @@
         loadBookingTable(); // Load table on page load
     });
 
-  function loadBookingTable() {
+ function loadBookingTable() {
     fetch(API_BASE_URL + "/booking")
         .then(response => response.text())
         .then(data => {
@@ -81,8 +81,7 @@
                         cancelButton = "<button class=\"delete-btn\" onclick=\"updateBookingStatus(" + id + ", 'CANCELED')\">" +
                             "<i class=\"fa-solid fa-square-xmark\"></i></button>";
                     } else if (status === "COMPLETE") {
-                        generateBillButton = "<a href=\"generate-bill.jsp?id=" + id + "\" class=\"bill-btn\">" +
-                            "<i>Generate Bill</i></a>"; // Only show if status is "COMPLETE"
+                        generateBillButton = "<button class=\"bill-btn\" onclick=\"generateBill(" + id + ")\">Generate Bill</button>";
                     }
 
                     // Determine action buttons
@@ -136,6 +135,22 @@
         }
     }
     
-   
+   function generateBill(bookingId) {
+    if (confirm("Are you sure you want to generate the bill for booking ID: " + bookingId + "?")) {
+        fetch(API_BASE_URL + "/billing?bookingId=" + bookingId, {
+            method: "POST",
+        })
+        .then(response => response.text())
+        .then(data => {
+            alert("Billing result: " + data);
+        })
+        .catch(error => {
+            alert("Error generating bill: " + error.message);
+            console.error("Error during billing fetch:", error);
+        });
+    }
+}
+
+f
    
 </script>

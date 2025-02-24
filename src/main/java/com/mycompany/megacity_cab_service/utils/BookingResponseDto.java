@@ -14,6 +14,7 @@ public class BookingResponseDto {
     private LocalDateTime bookingDate;
     private String status;
     private double distance;
+    private String vehicleType;
 
     // Constructors
     public BookingResponseDto() {
@@ -97,8 +98,21 @@ public class BookingResponseDto {
         this.status = status;
     }
     
+    public double getDistance() {
+        return distance;
+    }
+    
       public void setDistance(double distance) {
         this.distance = distance;
+    }
+      
+      
+    public String getvehicleType() {
+        return this.vehicleType;
+    }
+
+    public void setVehicleType(String type) {
+        this.vehicleType = type;
     }
 
     // toString method
@@ -128,7 +142,15 @@ public class BookingResponseDto {
     bookingResponse.setBookingDate(rs.getTimestamp("booking_date").toLocalDateTime());
     bookingResponse.setStatus(rs.getString("status"));
     bookingResponse.setDistance(rs.getDouble("distance"));
+    
+      try {
+        rs.findColumn("vehicle_type");
+        bookingResponse.setVehicleType(rs.getString("vehicle_type"));
+    } catch (SQLException e) {
+        
+    }
+
     return bookingResponse;
-}
+ }
 
 }

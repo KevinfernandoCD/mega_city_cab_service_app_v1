@@ -109,6 +109,36 @@ public class BookingDAO {
         }
         return null;
     }
+    
+     public BookingResponseDto getBookingByIdWithJoins(int bookingId) {
+     String query = "SELECT " +
+               "b.id, " +
+               "c.name AS customer_name, " +
+               "d.name AS driver_name, " +
+               "v.regNo AS vehicle_reg_no, " +
+               "v.type AS vehicle_type, " +
+               "b.pickup_location, " +
+               "b.drop_location, " +
+               "b.booking_date, " +
+               "b.status, " +
+               "b.distance " +
+               "FROM bookings b " +
+               "JOIN customers c ON b.customer_id = c.customer_id " +
+               "JOIN drivers d ON b.driver_id = d.id " +
+               "JOIN vehicles v ON b.vehicle_id = v.id " +
+               "WHERE b.id = ?";
+        try (PreparedStatement stmt = dbConnection.getConnection().prepareStatement(query)) {
+            stmt.setInt(1, bookingId);
+            try (ResultSet rs = stmt.executeQuery()) {
+                if (rs.next()) {
+                    return BookingResponseDto.extractBookingResponseFromResultSet(rs);
+                }
+            }
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     /**
      * Retrieves all bookings from the database.

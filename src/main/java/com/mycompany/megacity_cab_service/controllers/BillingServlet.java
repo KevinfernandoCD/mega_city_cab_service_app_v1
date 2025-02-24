@@ -1,87 +1,73 @@
-/*
- * Click nbfs://nbhost/SystemFileSystem/Templates/Licenses/license-default.txt to change this license
- * Click nbfs://nbhost/SystemFileSystem/Templates/JSP_Servlet/Servlet.java to edit this template
- */
 package com.mycompany.megacity_cab_service.controllers;
 
-import java.io.IOException;
-import java.io.PrintWriter;
+import com.mycompany.megacity_cab_service.BillingService;
+import com.mycompany.megacity_cab_service.models.Billing;
+import com.mycompany.megacity_cab_service.utils.DiscountFare;
+import com.mycompany.megacity_cab_service.utils.TaxFare;
 import jakarta.servlet.ServletException;
 import jakarta.servlet.annotation.WebServlet;
 import jakarta.servlet.http.HttpServlet;
 import jakarta.servlet.http.HttpServletRequest;
 import jakarta.servlet.http.HttpServletResponse;
 
-/**
- *
- * @author nuclei
- */
-@WebServlet(name = "BillingServlet", urlPatterns = {"/BillingServlet"})
-public class BillingServlet extends HttpServlet {
 
-    /**
-     * Processes requests for both HTTP <code>GET</code> and <code>POST</code>
-     * methods.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
-    protected void processRequest(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        response.setContentType("text/html;charset=UTF-8");
-        try (PrintWriter out = response.getWriter()) {
-            /* TODO output your page here. You may use following sample code. */
-            out.println("<!DOCTYPE html>");
-            out.println("<html>");
-            out.println("<head>");
-            out.println("<title>Servlet BillingServlet</title>");
-            out.println("</head>");
-            out.println("<body>");
-            out.println("<h1>Servlet BillingServlet at " + request.getContextPath() + "</h1>");
-            out.println("</body>");
-            out.println("</html>");
+import java.io.IOException;
+import java.sql.SQLException;
+import java.util.List;
+
+@WebServlet("/billing")
+public class BillingServlet extends HttpServlet {
+    private BillingService billingService;
+
+    @Override
+    public void init() throws ServletException {
+        try {
+            billingService = new BillingService(new DiscountFare(), new TaxFare());
+        } catch (SQLException | ClassNotFoundException e) {
+            throw new ServletException("Failed to initialize BillingService", e);
         }
     }
 
-    // <editor-fold defaultstate="collapsed" desc="HttpServlet methods. Click on the + sign on the left to edit the code.">
-    /**
-     * Handles the HTTP <code>GET</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
-    protected void doGet(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
+    protected void doPost(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int bookingId = Integer.parseInt(request.getParameter("bookingId"));
+        String result = billingService.addBilling(bookingId);
+        response.getWriter().write(result);
     }
 
-    /**
-     * Handles the HTTP <code>POST</code> method.
-     *
-     * @param request servlet request
-     * @param response servlet response
-     * @throws ServletException if a servlet-specific error occurs
-     * @throws IOException if an I/O error occurs
-     */
     @Override
-    protected void doPost(HttpServletRequest request, HttpServletResponse response)
-            throws ServletException, IOException {
-        processRequest(request, response);
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int billingId = Integer.parseInt(request.getParameter("billingId"));
+        double baseFare = Double.parseDouble(request.getParameter("baseFare"));
+        double discountAmount = Double.parseDouble(request.getParameter("discountAmount"));
+        double taxAmount = Double.parseDouble(request.getParameter("taxAmount"));
+        boolean paid = Boolean.parseBoolean(request.getParameter("paid"));
+        int bookingId = Integer.parseInt(request.getParameter("bookingId"));
+
+        Billing billing = new Billing(billingId, baseFare, discountAmount, taxAmount, paid, bookingId);
+        boolean success = billingService.updateBilling(billing);
+        response.getWriter().write(success ? "Billing updated successfully" : "Failed to update billing");
     }
 
-    /**
-     * Returns a short description of the servlet.
-     *
-     * @return a String containing servlet description
-     */
     @Override
-    public String getServletInfo() {
-        return "Short description";
-    }// </editor-fold>
+    protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        int billingId = Integer.parseInt(request.getParameter("billingId"));
+        boolean success = billingService.deleteBilling(billingId);
+        response.getWriter().write(success ? "Billing deleted successfully" : "Failed to delete billing");
+    }
 
+    @Override
+    protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+        String billingIdParam = request.getParameter("billingId");
+        if (billingIdParam != null) {
+            int billingId = Integer.parseInt(billingIdParam);
+            Billing billing = billingService.getBillingById(billingId);
+            response.getWriter().write(billing != null ? billing.toString() : "Billing record not found");
+        } else {
+            List<Billing> billings = billingService.getAllBillingRecords();
+            billings.forEach(response.getWriter()::println);
+           response.setStatus(HttpServletResponse.SC_OK);
+
+        }
+    }
 }

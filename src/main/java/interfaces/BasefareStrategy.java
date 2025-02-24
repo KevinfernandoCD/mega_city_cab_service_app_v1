@@ -1,5 +1,5 @@
 package interfaces;
 
 public interface BasefareStrategy {
-    double calculateBasefare(double distance);
+     double calculateBasefare(double distance);
 }

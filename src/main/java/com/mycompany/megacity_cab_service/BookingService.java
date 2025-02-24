@@ -37,7 +37,6 @@ public class BookingService {
     public boolean updateBooking(Booking booking) {
         return bookingDAO.updateBooking(booking);
     }
-
     /**
      * Deletes a booking by its ID.
      *
@@ -56,6 +55,10 @@ public class BookingService {
      */
     public Booking getBookingById(int bookingId) {
         return bookingDAO.getBookingById(bookingId);
+    }
+    
+     public BookingResponseDto getBookingByIdWithData(int bookingId) {
+        return bookingDAO.getBookingByIdWithJoins(bookingId);
     }
 
     /**
