@@ -53,9 +53,14 @@
 
     <div class="admin-container">
         <h1>Megacity Cab Service</h1>
+        <p>Designed By Kevin Fernando</p>
         <h3>Admin Portal</h3>
         <button id="createAdmin">Get Admin Credentials</button>
         <a href="views/login.jsp">Already created an admin account?</a>
+    </div>
+    
+    <div>
+        <p>student Id  - st20264270</p>
     </div>
 
     <script>
