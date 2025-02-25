@@ -139,6 +139,7 @@ public class TransactionsDAO {
         transaction.setBookingId(rs.getInt("booking_id"));
         transaction.setAmount(rs.getDouble("amount"));
         transaction.setPaymentMethod(rs.getString("payment_method"));
+        transaction.setDate(rs.getTimestamp("createdAt").toLocalDateTime());
         return transaction;
     }
 }

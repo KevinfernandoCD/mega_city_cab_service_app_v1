@@ -9,7 +9,7 @@
                 <th>Total Trip Fare</th>
                 <th>Added Discount</th>
                 <th>Tax Amount</th>
-                <th>Paid</th>
+      
                 <th>Actions</th>
             </tr>
         </thead>
@@ -51,9 +51,8 @@
     "<td>Rs." + parseFloat(totalFare).toFixed(2) + "</td>" +
     "<td>Rs." + parseFloat(discount).toFixed(2) + "</td>" +
     "<td>Rs." + parseFloat(tax).toFixed(2) + "</td>" +
-    "<td>" + (paid === "true" ? "Yes" : "No") + "</td>" +
     "<td>" +
-    "<a href=\"new-transaction.jsp?billId=" + billId + "\" class=\"edit-btn\">" +
+            "<a href=\"new-transaction.jsp?billId=" + billId + "&bookingId=" + bookingId + "\" class=\"edit-btn\">" +
     "<i>Update Payment</i></a>" +
     "</td>";
 

@@ -1,5 +1,7 @@
 package com.mycompany.megacity_cab_service.models;
 
+import java.time.LocalDateTime;
+
 
 public class Transaction {
     private int id;
@@ -8,18 +10,20 @@ public class Transaction {
     private int bookingId;
     private double amount;
     private String paymentMethod;
+    private LocalDateTime date;
 
     // Constructors
     public Transaction() {
     }
 
-    public Transaction(int id, int billId, int customerId, int bookingId, double amount, String paymentMethod) {
+    public Transaction(int id, int billId, int customerId, int bookingId, double amount, String paymentMethod,LocalDateTime date ) {
         this.id = id;
         this.billId = billId;
         this.customerId = customerId;
         this.bookingId = bookingId;
         this.amount = amount;
         this.paymentMethod = paymentMethod;
+        this. date = date;
     }
     
       public Transaction(int billId, int customerId, int bookingId, double amount, String paymentMethod) {
@@ -79,6 +83,14 @@ public class Transaction {
     public void setPaymentMethod(String paymentMethod) {
         this.paymentMethod = paymentMethod;
     }
+    
+     public LocalDateTime getDate() {
+        return date;
+    }
+
+    public void setDate(LocalDateTime newDate) {
+        this.date = newDate;
+    }
 
     @Override
     public String toString() {
@@ -89,6 +101,7 @@ public class Transaction {
                 ", bookingId=" + bookingId +
                 ", amount=" + amount +
                 ", paymentMethod='" + paymentMethod + '\'' +
+                ", date='" + date + '\'' +
                 '}';
     }
 }
