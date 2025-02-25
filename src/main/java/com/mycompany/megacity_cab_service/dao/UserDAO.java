@@ -34,6 +34,17 @@ public class UserDAO {
         }
         return null;
     }
+    
+     public String insertDummyAdmin() {
+        String query = "INSERT INTO users (username, email, password, role) VALUES (?, ?, ?, ?)";
+        try {
+            dbConnection.executeWriteQuery(query, "admin", "admin@gmail.com", "123", "admin");
+            return "User has been added successfully";
+        } catch (SQLException e) {
+            e.printStackTrace();
+        }
+        return null;
+    }
 
     /**
      * Updates a user's details.

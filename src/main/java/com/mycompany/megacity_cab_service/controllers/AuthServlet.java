@@ -50,9 +50,6 @@ public class AuthServlet extends HttpServlet {
         }
     }
 
-    /**
-     * Simple GET endpoint to check if the API is running.
-     */
     @Override
     protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         response.setContentType("text/plain");
@@ -63,7 +60,7 @@ public class AuthServlet extends HttpServlet {
         }
     }
     
-      @Override
+    @Override
     protected void doDelete(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
         HttpSession session = request.getSession(false); // Don't create a new session
         if (session != null) {
@@ -76,4 +73,30 @@ public class AuthServlet extends HttpServlet {
             out.write("{\"message\": \"Logout successful\"}");
         }
     }
+    
+     @Override
+    protected void doPut(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
+     
+        String result = authService.registerDummyAdmin();
+        
+        PrintWriter out = response.getWriter();
+        
+        response.setStatus(result != null ? HttpServletResponse.SC_CREATED : HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
+        
+        if(result == null) { 
+         response.setStatus(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);              
+         out.write("Something went wrong");
+        }
+  
+        if(result == "Admin account exists.") {
+             response.setStatus(HttpServletResponse.SC_BAD_REQUEST);
+             out.write(result);
+             return;
+
+        }
+        response.setStatus( HttpServletResponse.SC_CREATED);
+        out.write(result);
+
+    }
+    
 }

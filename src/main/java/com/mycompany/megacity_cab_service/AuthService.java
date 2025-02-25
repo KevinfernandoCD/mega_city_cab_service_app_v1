@@ -37,4 +37,13 @@ public class AuthService {
         }
         return "Invalid email or password";
     }
+    
+     public String registerDummyAdmin () {
+         
+        User existingUser = userDAO.getUserByEmail("admin@gmail.com");
+        if (existingUser != null) {
+            return "Admin account exists.";
+        }
+        return userDAO.insertDummyAdmin();
+    }
 }
