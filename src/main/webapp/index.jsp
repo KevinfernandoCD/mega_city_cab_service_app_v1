@@ -54,14 +54,14 @@
     <div class="admin-container">
         <h1>Megacity Cab Service</h1>
         <p>Designed By Kevin Fernando</p>
+            <p>student Id  - st20264270</p>
         <h3>Admin Portal</h3>
         <button id="createAdmin">Get Admin Credentials</button>
         <a href="views/login.jsp">Already created an admin account?</a>
+         <a href="views/user-guide.jsp">See How to use the system</a>
     </div>
     
-    <div>
-        <p>student Id  - st20264270</p>
-    </div>
+
 
     <script>
     const API_BASE_URL = "<%= application.getInitParameter("apiBaseUrl") %>";
