@@ -1,0 +1,71 @@
+name: Deploy JSP Servlet App
+
+on:
+  push:
+    branches:
+      - main  # Runs only when code is pushed to main branch
+  pull_request:
+    branches:
+      - main  # Runs on PRs to main
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout Code
+        uses: actions/checkout@v3
+
+      - name: Set Up Java
+        uses: actions/setup-java@v3
+        with:
+          distribution: 'temurin' # Uses Eclipse Temurin (OpenJDK)
+          java-version: '17'  # Change if using a different Java version
+
+      - name: Cache Maven Dependencies
+        uses: actions/cache@v3
+        with:
+          path: ~/.m2
+          key: maven-${{ runner.os }}-${{ hashFiles('**/pom.xml') }}
+          restore-keys: maven-${{ runner.os }}-
+
+      - name: Build with Maven
+        run: mvn clean package -DskipTests=true
+
+      - name: Run Tests
+        run: mvn test
+
+      - name: Upload WAR Artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: war-file
+          path: target/*.war
+
+  deploy:
+    needs: build  # Runs only if build job is successful
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Download WAR File
+        uses: actions/download-artifact@v3
+        with:
+          name: war-file
+          path: target/
+
+      - name: Deploy to Remote Tomcat Server
+        uses: appleboy/scp-action@master
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          password: ${{ secrets.SERVER_PASS }}
+          source: "target/*.war"
+          target: "/opt/tomcat/webapps/"
+
+      - name: Restart Tomcat Server
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.SERVER_HOST }}
+          username: ${{ secrets.SERVER_USER }}
+          password: ${{ secrets.SERVER_PASS }}
+          script: |
+            sudo systemctl restart tomcat
